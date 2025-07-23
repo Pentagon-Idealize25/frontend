@@ -26,27 +26,82 @@ export default function SignupForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Basic frontend validation
+    if (!formData.name.trim()) {
+      toast.error('Name is required');
+      return;
+    }
+
+    if (!formData.email.trim()) {
+      toast.error('Email is required');
+      return;
+    }
+
+    if (!formData.birthday) {
+      toast.error('Birthday is required');
+      return;
+    }
+
+    if (!formData.password) {
+      toast.error('Password is required');
+      return;
+    }
+
     if (formData.password !== formData.confirmPassword) {
       toast.error('Passwords do not match');
+      return;
+    }
+
+    if (formData.password.length < 8) {
+      toast.error('Password must be at least 8 characters long');
       return;
     }
     
     setLoading(true);
     
     try {
+      // Validate date format before sending
+      const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+      if (!dateRegex.test(formData.birthday)) {
+        toast.error('Birthday must be in YYYY-MM-DD format');
+        setLoading(false);
+        return;
+      }
+
+      // Validate password requirements
+      if (!/[A-Z]/.test(formData.password)) {
+        toast.error('Password must contain at least one uppercase letter');
+        setLoading(false);
+        return;
+      }
+
+      if (!/[a-z]/.test(formData.password)) {
+        toast.error('Password must contain at least one lowercase letter');
+        setLoading(false);
+        return;
+      }
+
+      if (!/\d/.test(formData.password)) {
+        toast.error('Password must contain at least one number');
+        setLoading(false);
+        return;
+      }
+
       await signup({
-        name: formData.name,
-        email: formData.email,
+        name: formData.name.trim(),
+        email: formData.email.trim(),
         birthday: formData.birthday,
         password: formData.password,
         confirm_password: formData.confirmPassword
       });
+      
       toast.success('Account created successfully');
-  setTimeout(() => {
-    router.push('/dashboard');
-  }, 1500);
-    } catch (error) {
-      toast.error('Failed to create account');
+      setTimeout(() => {
+        router.push('/dashboard');
+      }, 1500);
+    } catch (error: any) {
+      console.error('Signup error:', error);
+      toast.error(error.message || 'An unexpected error occurred');
     } finally {
       setLoading(false);
     }

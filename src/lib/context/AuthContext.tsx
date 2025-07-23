@@ -16,6 +16,8 @@ interface AuthContextType {
   logout: () => Promise<void>;
   isAuthenticated: boolean;
   loading: boolean;
+  signup: (formData: SignupFormData) => Promise<void>;         // <-- Add this
+  refreshTokens: () => Promise<boolean>;    
 }
  type SignupFormData = {
   name: string;
@@ -29,7 +31,8 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState<User | null>(null);
+
   const [loading, setLoading] = useState(true);
 
 // In AuthContext.tsx
@@ -99,18 +102,52 @@ const refreshTokens = async () => {
 
 const signup = async (formData: SignupFormData) => {
   try {
-    const response = await axios.post('http://localhost:8000/auth/signup',formData,{ withCredentials: true }
-    );
-    // Get the user info after signup
-    const meResponse = await axios.get(
-      'http://localhost:8000/auth/me',
-      { withCredentials: true }
+    let birthday;
+    try {
+      // Ensure the date is in ISO format
+      if (!formData.birthday) {
+        throw new Error('Birthday is required');
+      }
+      birthday = new Date(formData.birthday).toISOString().split('T')[0];
+    } catch (e) {
+      throw new Error('Invalid date format. Please use YYYY-MM-DD');
+    }
+
+    const formattedData = {
+      ...formData,
+      birthday
+    };
+
+    const response = await axios.post(
+      'http://localhost:8000/auth/signup',
+      formattedData,
+      { 
+        withCredentials: true,
+        validateStatus: (status) => status < 500 // Don't reject if the status code is less than 500
+      }
     );
 
-    setUser(meResponse.data);
-  } catch (error) {
-    console.error('Signup failed:', error);
-    throw new Error('Signup failed');
+    if (response.data.status === 'error') {
+      throw new Error(response.data.message || 'Signup failed');
+    }
+
+    if (response.data.status === 'success' && response.data.data) {
+      // Set the user directly from the signup response
+      setUser(response.data.data);
+    } else {
+      console.error('Unexpected response format:', response.data);
+      throw new Error('Invalid response format from server');
+    }
+  } catch (error: any) {
+    console.error('Signup failed:', error.response?.data || error);
+    
+    if (error.response?.data?.message) {
+      throw new Error(error.response.data.message);
+    } else if (error.message) {
+      throw new Error(error.message);
+    } else {
+      throw new Error('An unexpected error occurred during signup');
+    }
   }
 };
 
