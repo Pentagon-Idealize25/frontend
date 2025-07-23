@@ -1,66 +1,131 @@
-// app/dashboard/page.tsx
+// app/dashboard/page.tsx - Professional Dashboard Page
 'use client';
 
+import { memo, useCallback, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
+import { Card, CardHeader, CardContent } from '@/components/ui/card';
 import { useSessionContext } from '@/app/dashboard/layout';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '@/lib/context/AuthContext'
+import { useAuth } from '@/lib/context/AuthContext';
+import { MessageCircle, Plus, Loader2, Sparkles } from 'lucide-react';
+import { toast } from 'sonner';
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:8000';
 
+interface CreateSessionData {
+  user_id: string;
+  title: string;
+}
 
+interface SessionResponse {
+  session_id: string;
+}
 
-const createSession = async (userId: string, setActiveSession: any, router: any) => {
+// Professional Welcome Card Component
+const WelcomeCard = memo(() => (
+  <div className="text-center space-y-6 p-8">
+    <div className="w-20 h-20 mx-auto bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 rounded-2xl flex items-center justify-center shadow-sm">
+      <div className="relative">
+        <MessageCircle className="w-10 h-10 text-gray-600 dark:text-gray-300" />
+        <Sparkles className="w-4 h-4 text-blue-500 absolute -top-1 -right-1" />
+      </div>
+    </div>
+    
+    <div>
+      <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+        Welcome to Pentagon Chat
+      </h1>
+      <p className="text-gray-600 dark:text-gray-400 leading-relaxed max-w-sm mx-auto">
+        Start a new conversation to begin your legal consultation with our AI assistant
+      </p>
+    </div>
+  </div>
+));
 
-  
+WelcomeCard.displayName = 'WelcomeCard';
+
+// Professional Create Session Function
+const createSession = async (
+  userId: string, 
+  setActiveSession: (session: { id: string; title: string }) => void, 
+  router: ReturnType<typeof useRouter>,
+  setIsLoading: (loading: boolean) => void
+) => {
+  setIsLoading(true);
   
   try {
-    const data = {
+    const data: CreateSessionData = {
       user_id: userId,
       title: "New Session"
     };
-    
-    const res = await axios.post("http://localhost:8000/sessions", data);
-    const sessionId = res.data.session_id;
+
+    const response = await axios.post<SessionResponse>(`${BASE_URL}/sessions`, data);
+    const sessionId = response.data.session_id;
     
     // Set the new session as active
     setActiveSession({ id: sessionId, title: data.title });
     
+    // Show success message
+    toast.success('New conversation started!');
+    
     // Redirect to the new chat session
     router.push(`/dashboard/chat/${sessionId}`);
-  } catch (err) {
-    console.error("Failed to create session:", err);
+  } catch (error) {
+    console.error("Failed to create session:", error);
+    toast.error('Failed to create new conversation. Please try again.');
+  } finally {
+    setIsLoading(false);
   }
 };
 
-export default function DashboardPage() {
+const DashboardPage = memo(() => {
   const { setActiveSession } = useSessionContext();
   const router = useRouter();
-  const userId = '68393605181b9fb5e3e48e01'; // Replace with actual user ID
-  const { user,isAuthenticated, loading } = useAuth() 
+  const { user } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
   
-  return (
+  // Use actual user ID when available, fallback to placeholder
+  const userId = user?.id || '68393605181b9fb5e3e48e01';
+  
+  const handleCreateSession = useCallback(() => {
+    createSession(userId, setActiveSession, router, setIsLoading);
+  }, [userId, setActiveSession, router]);
 
-    
-    <div className="h-full flex items-center justify-center">
-      <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
-          <CardTitle>Welcome to Pentagon Chat</CardTitle>
-          <CardDescription>
-            Start a new conversation to begin your legal consultation
-          </CardDescription>
+  return (
+    <div className="h-full flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 p-6">
+      <Card className="w-full max-w-md shadow-xl border-0 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm">
+        <CardHeader className="pb-6">
+          <WelcomeCard />
         </CardHeader>
-        <CardContent className="flex flex-col items-center">
-          <div className="bg-gray-200 border-2 border-dashed rounded-xl w-16 h-16 mb-6" />
-          
+        
+        <CardContent className="pt-0">
           <Button 
-            className="w-full max-w-xs"
-            onClick={() => createSession(userId, setActiveSession, router)}
+            className="w-full h-12 bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-700 dark:hover:bg-gray-100 transition-all duration-200 shadow-lg hover:shadow-xl active:scale-[0.98] font-semibold"
+            onClick={handleCreateSession}
+            disabled={isLoading}
           >
-            Start New Conversation
+            {isLoading ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Creating...
+              </>
+            ) : (
+              <>
+                <Plus className="w-4 h-4 mr-2" />
+                Start New Conversation
+              </>
+            )}
           </Button>
+          
+          <p className="text-xs text-gray-500 dark:text-gray-400 text-center mt-4">
+            Your conversation will be saved automatically
+          </p>
         </CardContent>
       </Card>
     </div>
   );
-}
+});
+
+DashboardPage.displayName = 'DashboardPage';
+
+export default DashboardPage;

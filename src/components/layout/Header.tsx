@@ -1,18 +1,18 @@
 // components/layout/Header.tsx
 'use client';
 
-import { Menu, Bell } from 'lucide-react';
+import { Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useSessionContext } from '@/app/dashboard/layout';
 import { usePathname } from 'next/navigation';
+import { memo, useMemo } from 'react';
 
-const Header = () => {
+const Header = memo(() => {
   const { activeSession } = useSessionContext();
   const pathname = usePathname();
 
-  const getTitle = () => {
+  const title = useMemo(() => {
     if (activeSession) {
-      console.log(activeSession.title)
       return activeSession.title;
     }
     
@@ -25,24 +25,29 @@ const Header = () => {
     }
     
     return 'Pentagon Chat';
-  };
+  }, [activeSession, pathname]);
 
   return (
     <header className="bg-white border-b shadow-sm">
       <div className="flex items-center justify-center p-4">
         <div className="flex items-center justify-center gap-4">
-          <Button variant="ghost" size="icon" className="md:hidden">
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className="md:hidden"
+            aria-label="Open menu"
+          >
             <Menu className="h-6 w-6" />
           </Button>
           <h1 className="text-xl font-bold truncate max-w-[200px] md:max-w-md">
-            {getTitle()}
+            {title}
           </h1>
         </div>
-        
-        
       </div>
     </header>
   );
-};
+});
+
+Header.displayName = 'Header';
 
 export default Header;
