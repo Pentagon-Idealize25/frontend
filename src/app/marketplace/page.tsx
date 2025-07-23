@@ -22,7 +22,7 @@ const sampleLawyers: Lawyer[] = [
     languages: ["French"],
     servicesOffered: ["All"],
     consultationMode: ["Any"],
-    imageUrl: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=400&h=400&fit=crop&crop=face"
+    imageUrl: "/image.png" // Adjust the path as needed
   },
   {
     _id: "687be98d4e710b8309221057",
@@ -38,7 +38,7 @@ const sampleLawyers: Lawyer[] = [
     languages: ["English", "Sinhala"],
     servicesOffered: ["Legal Consultation", "Document Review"],
     consultationMode: ["Online", "In-person"],
-    imageUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face"
+    imageUrl: "/profile2.jpg"
   },
   {
     _id: "687be98d4e710b8309221058",
@@ -54,7 +54,7 @@ const sampleLawyers: Lawyer[] = [
     languages: ["English", "Sinhala", "Tamil"],
     servicesOffered: ["Divorce Proceedings", "Property Transfers"],
     consultationMode: ["In-person", "Phone"],
-    imageUrl: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=400&fit=crop&crop=face"
+    imageUrl: "/image3.jpg"
   }
 ];
 

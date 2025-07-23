@@ -28,7 +28,7 @@ const LawyerCard: React.FC<LawyerCardProps> = ({ lawyer }) => {
         <img
           src={lawyer.imageUrl || "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face"}
           alt={lawyer.lawyerName}
-          className="w-full h-48 object-cover"
+          className="w-full h-50 object-center object-cover"
           onError={(e) => {
             e.currentTarget.src = "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face";
           }}
