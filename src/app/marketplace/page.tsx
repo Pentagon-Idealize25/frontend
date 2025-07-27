@@ -1,12 +1,13 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import MarketplaceHeader from '../../components/Marketplace/MarketplaceHeader';
 import FilterSidebar, { type Filters } from '../../components/Marketplace/FilterSidebar';
 import LawyerGrid from '../../components/Marketplace/LawyerGrid';
 import { type Lawyer } from '../../components/Marketplace/LawyerCard';
 import CustomerNavbar from '../../components/CustomerHeader/customersidebar';
-// Sample data based on your MongoDB collection structure
+
+// Sample data
 const sampleLawyers: Lawyer[] = [
   {
     _id: "687be98d4e710b8309221056",
@@ -17,12 +18,12 @@ const sampleLawyers: Lawyer[] = [
     yearsOfExperience: 6,
     contact: "0111042838",
     email: "lava@gmail.com",
-    currentLawFirm: "UbeSeeyageGedara",
+    currentLawFirm: "TLM Law Associates",
     areaOfExpertise: ["Mental illness"],
     languages: ["French"],
     servicesOffered: ["All"],
     consultationMode: ["Any"],
-    imageUrl: "/image.png" // Adjust the path as needed
+    imageUrl: "/image.png"
   },
   {
     _id: "687be98d4e710b8309221057",
@@ -67,23 +68,21 @@ const MarketplacePage: React.FC = () => {
     consultationMode: []
   });
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const [sortBy, setSortBy] = useState<string>(''); // NEW STATE for sorting
 
   const filterLawyers = () => {
     let filtered = lawyers.filter(lawyer => {
-      // Search term filter
       if (searchTerm && !lawyer.lawyerName.toLowerCase().includes(searchTerm.toLowerCase()) &&
           !lawyer.areaOfExpertise.some(area => area.toLowerCase().includes(searchTerm.toLowerCase()))) {
         return false;
       }
 
-      // Expertise filter
       if (filters.expertise.length > 0) {
         if (!filters.expertise.some(exp => lawyer.areaOfExpertise.includes(exp))) {
           return false;
         }
       }
 
-      // Experience filter
       if (filters.experience.length > 0) {
         const expMatch = filters.experience.some(exp => {
           if (exp === '0-5 years' && lawyer.yearsOfExperience <= 5) return true;
@@ -94,7 +93,6 @@ const MarketplacePage: React.FC = () => {
         if (!expMatch) return false;
       }
 
-      // Consultation mode filter
       if (filters.consultationMode.length > 0) {
         if (!filters.consultationMode.some(mode => lawyer.consultationMode.includes(mode))) {
           return false;
@@ -124,15 +122,30 @@ const MarketplacePage: React.FC = () => {
     if (value !== undefined && checked !== undefined) {
       setFilters(prev => ({
         ...prev,
-        [filterType]: checked 
+        [filterType]: checked
           ? [...prev[filterType as keyof Filters], value]
           : prev[filterType as keyof Filters].filter(item => item !== value)
       }));
     }
   };
 
-  // TODO: Replace with actual API call
+  const sortedFilteredLawyers = useMemo(() => {
+    const sorted = [...filteredLawyers];
+    switch (sortBy) {
+      case 'name':
+        return sorted.sort((a, b) => a.lawyerName.localeCompare(b.lawyerName));
+      case 'experience':
+        return sorted.sort((a, b) => b.yearsOfExperience - a.yearsOfExperience);
+
+      case 'location':
+        return sorted.sort((a, b) => a.lawyerAddress.localeCompare(b.lawyerAddress));
+      default:
+        return sorted;
+    }
+  }, [filteredLawyers, sortBy]);
+
   useEffect(() => {
+    // Example API call placeholder
     // fetch('/api/lawyers')
     //   .then(response => response.json())
     //   .then(data => {
@@ -144,12 +157,12 @@ const MarketplacePage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-         <CustomerNavbar 
+      <CustomerNavbar
         userName="John Smith"
         userProfileImage="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face"
       />
       <MarketplaceHeader />
-      
+
       <div className="container mx-auto px-4 py-8">
         {/* Search Bar */}
         <div className="mb-8">
@@ -166,7 +179,25 @@ const MarketplacePage: React.FC = () => {
 
         <div className="flex flex-col lg:flex-row gap-8">
           <FilterSidebar onFilterChange={handleFilterChange} filters={filters} />
-          <LawyerGrid lawyers={filteredLawyers} />
+
+          <div className="flex-1">
+            {/* Sorting Dropdown */}
+            <div className="mb-6 flex justify-end">
+              <select
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+              >
+                <option value="">Sort by...</option>
+                <option value="experience">Sort by Experience</option>
+                <option value="name">Sort by Name</option>
+                <option value="location">Sort by Location</option>
+              </select>
+            </div>
+
+            {/* Lawyer Grid */}
+            <LawyerGrid lawyers={sortedFilteredLawyers} />
+          </div>
         </div>
       </div>
     </div>

@@ -12,11 +12,7 @@ const LawyerGrid: React.FC<LawyerGridProps> = ({ lawyers }) => {
         <h2 className="text-2xl font-bold text-gray-800">
           Available Lawyers ({lawyers.length})
         </h2>
-        <select className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500">
-          <option>Sort by Experience</option>
-          <option>Sort by Name</option>
-          <option>Sort by Location</option>
-        </select>
+        
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
