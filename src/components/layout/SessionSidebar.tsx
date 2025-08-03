@@ -122,7 +122,7 @@ const SessionsSidebar = ({
       <div className="p-6 border-b border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
         <div className="flex justify-between items-center mb-6">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-blue-600 rounded-lg">
+            <div className="p-2 bg-gray-900 rounded-lg">
               <MessageSquare className="h-5 w-5 text-white" />
             </div>
             <div>
@@ -150,7 +150,7 @@ const SessionsSidebar = ({
         {/* New Session Button */}
         <Button 
           onClick={createNewSession}
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 mb-4 transition-colors duration-200"
+          className="w-full bg-gray-600 hover:bg-gray-700 text-white font-medium py-2.5 mb-4 transition-colors duration-200"
         >
           <Plus className="h-4 w-4 mr-2" />
           New Consultation

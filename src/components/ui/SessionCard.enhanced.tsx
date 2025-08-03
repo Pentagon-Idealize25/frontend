@@ -126,8 +126,8 @@ const SessionCard = memo(({ session, isActive, onClick, onSessionUpdated, onSess
       className={cn(
         'group relative p-4 rounded-lg cursor-pointer transition-all duration-200 border',
         isActive 
-          ? 'bg-blue-600 dark:bg-blue-500 text-white border-blue-600 dark:border-blue-500 shadow-md' 
-          : 'bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-750 border-slate-200 dark:border-slate-700 hover:shadow-sm hover:border-slate-300 dark:hover:border-slate-600',
+          ? 'bg-gray-900  text-white border-gray-600 shadow-md' 
+          : 'bg-white  hover:bg-slate-50  border-slate-200  hover:shadow-sm hover:border-slate-300 ',
         isEditing && 'cursor-default',
         isLoading && 'opacity-50 pointer-events-none'
       )}
@@ -149,13 +149,13 @@ const SessionCard = memo(({ session, isActive, onClick, onSessionUpdated, onSess
             'flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center mt-0.5',
             isActive 
               ? 'bg-white/20' 
-              : 'bg-blue-100 dark:bg-blue-900/30'
+              : 'bg-gray-100'
           )}>
             <MessageCircle className={cn(
               'w-4 h-4',
               isActive 
                 ? 'text-white' 
-                : 'text-blue-600 dark:text-blue-400'
+                : 'text-gray-600'
             )} />
           </div>
 
@@ -179,7 +179,7 @@ const SessionCard = memo(({ session, isActive, onClick, onSessionUpdated, onSess
               />
             ) : (
               <h3 className={cn(
-                'font-semibold text-sm truncate',
+                'font-medium text-sm truncate',
                 isActive 
                   ? 'text-white' 
                   : 'text-slate-900 dark:text-white'
@@ -200,8 +200,8 @@ const SessionCard = memo(({ session, isActive, onClick, onSessionUpdated, onSess
         
         {/* Action Buttons */}
         <div className={cn(
-          'flex gap-1 transition-opacity duration-200',
-          isActive ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+          'flex gap-1 transition-opacity duration-200 hover:opacity-100 ',
+          isActive ? 'opacity-0' : 'opacity-0 group-hover:opacity-100'
         )}>
           {isEditing ? (
             <>
