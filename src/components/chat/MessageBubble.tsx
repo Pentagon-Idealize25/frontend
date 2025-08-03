@@ -193,15 +193,15 @@ const MessageBubble = memo(({ message, className }: MessageBubbleProps) => {
         </div>
 
         {/* Enhanced Message Content */}
-        <div className="flex flex-col space-y-2 min-w-0">
+        <div className="flex flex-col space-y-1 min-w-0 h-fit">
           <div className={cn(
-            'relative px-5 py-4 rounded-2xl shadow-sm transition-all duration-300 hover:shadow-md',
+            'relative px-5 py-2 rounded-2xl  transition-all duration-300 ',
             isOwnMessage 
-              ? 'bg-gradient-to-br from-slate-900 to-slate-800 dark:from-white dark:to-slate-50 text-white dark:text-slate-900 rounded-br-md border-l-4 border-l-slate-600 dark:border-l-slate-300' 
-              : 'bg-gradient-to-br from-white to-slate-50 dark:from-slate-800 dark:to-slate-700 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-600 rounded-bl-md shadow-lg hover:shadow-xl border-l-4 border-l-blue-500'
+              ? 'bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-br-md ' 
+              : 'bg-gradient-to-br from-white to-slate-50 border  dark:border-slate-600 rounded-bl-md   '
           )}>
             {/* Content */}
-            <div className="whitespace-pre-wrap break-words text-sm leading-relaxed font-medium">
+            <div className="whitespace-pre-wrap break-words text-sm leading-relaxed font-medium py-1">
               {formattedContent}
             </div>
 
@@ -242,7 +242,7 @@ const MessageBubble = memo(({ message, className }: MessageBubbleProps) => {
               {formattedTime}
             </time>
             {message.isTemporary && (
-              <span className="ml-2 text-amber-500 text-xs">• Sending</span>
+              <span className="ml-2 text-amber-500 text-2xs">• Sending</span>
             )}
           </div>
         </div>

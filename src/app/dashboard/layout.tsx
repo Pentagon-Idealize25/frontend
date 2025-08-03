@@ -129,13 +129,11 @@ const DashboardLayout = memo(function DashboardLayout({ children }: DashboardLay
         <SidebarOverlay isOpen={isSidebarOpen} onClose={handleSidebarClose} />
 
         {/* Main content area */}
-        <div className="flex flex-col flex-1 overflow-hidden">
-          <Header />
-          
+        
           <main className="flex-1 min-h-0 bg-white dark:bg-gray-900">
             {children}
           </main>
-        </div>
+     
         
         <Toaster 
           position="top-right" 

@@ -212,12 +212,12 @@ const ChatPage: React.FC = () => {
   return (
     <div className="h-full flex flex-col bg-white dark:bg-gray-900">
       {/* Professional Header */}
-      <ChatHeader 
+      {/* <ChatHeader 
         messageCount={messageCount}
         sessionId={sessionIdDisplay}
         onBack={handleBack}
         hasError={!!state.error}
-      />
+      /> */}
 
       {/* Chat Interface */}
       <div className="flex-1 min-h-0">

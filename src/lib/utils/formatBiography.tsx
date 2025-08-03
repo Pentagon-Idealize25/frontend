@@ -36,7 +36,6 @@ const DEFAULT_OPTIONS: FormattingOptions = {
   codeClassName: "bg-gray-100 px-1 rounded text-sm font-mono",
   bulletClassName: "ml-4 list-disc",
   headingClassName: "mt-3 font-semibold",
-  paragraphClassName: "mt-3",
   customPatterns: []
 };
 

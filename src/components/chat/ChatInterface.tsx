@@ -131,7 +131,7 @@
 //     try {
 //       const response = await axios.get(`http://localhost:8000/messages/${sessionId}`);
 //       const latestMessages = response.data;
-      
+
 //       setMessages(prev => {
 //         const realMessages = prev.filter(m => !m.isTemporary);
 //         if (latestMessages.length > realMessages.length) {
@@ -139,7 +139,7 @@
 //         }
 //         return prev;
 //       });
-      
+
 //       setIsTyping(false);
 //     } catch (error) {
 //       console.error('Error fetching latest messages:', error);
@@ -166,19 +166,19 @@
 //     try {
 //       setIsSending(true);
 //       setShouldMaintainScroll(true);
-      
+
 //       setMessages(prev => [...prev, tempUserMessage]);
 //       reset();
 //       setTimeout(() => setIsTyping(true), 500);
-      
+
 //       await createMessage({
 //         session_id: sessionId,
 //         sender: 'user',
 //         content: data.content,
 //       });
-      
+
 //       setTimeout(fetchLatestMessages, 1500);
-      
+
 //     } catch (err) {
 //       toast.error('Message sending failed');
 //       console.error(err);
@@ -294,40 +294,49 @@ interface ChatInterfaceProps {
 const EmptyState = memo(() => (
   <div className="flex-1 flex items-center justify-center p-8">
     <div className="text-center max-w-lg">
-      {/* Hero Icon */}
+      {/* Professional Hero Icon */}
       <div className="relative mb-8">
-        <div className="w-24 h-24 mx-auto bg-gradient-to-br from-blue-500 to-blue-600 rounded-3xl flex items-center justify-center shadow-2xl">
-          <MessageSquare className="w-12 h-12 text-white" />
+        <div className="w-28 h-28 mx-auto bg-gradient-to-br from-blue-600 to-indigo-700 rounded-3xl flex items-center justify-center shadow-2xl">
+          <Shield className="w-14 h-14 text-white" />
         </div>
-        <div className="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-br from-amber-400 to-amber-500 rounded-full flex items-center justify-center">
-          <Sparkles className="w-4 h-4 text-white" />
+        <div className="absolute -top-3 -right-3 w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center shadow-lg">
+          <Sparkles className="w-5 h-5 text-white" />
         </div>
       </div>
 
-      {/* Content */}
-      <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-3">
-        Legal AI Assistant Ready
+      {/* Professional Content */}
+      <h3 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">
+        Professional Legal AI Assistant
       </h3>
-      <p className="text-slate-600 dark:text-slate-400 text-base leading-relaxed mb-8 max-w-md mx-auto">
-        Start a conversation with our advanced legal AI. Get instant answers to your legal questions with professional-grade assistance.
+      <p className="text-slate-600 dark:text-slate-400 text-lg leading-relaxed mb-8 max-w-md mx-auto">
+        Get instant, professional legal guidance powered by advanced AI. Ask questions about contracts, regulations, compliance, and more.
       </p>
 
-      {/* Feature Pills */}
+      {/* Professional Feature Pills */}
       <div className="flex flex-wrap justify-center gap-3 mb-8">
-        <div className="flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-800 rounded-full">
+        <div className="flex items-center gap-2 px-4 py-2.5 bg-slate-100 dark:bg-slate-800 rounded-full border border-slate-200 dark:border-slate-700">
           <Shield className="w-4 h-4 text-green-600" />
-          <span className="text-sm font-medium text-slate-700 dark:text-slate-300">Secure & Confidential</span>
+          <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">Confidential & Secure</span>
         </div>
-        <div className="flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-800 rounded-full">
+        <div className="flex items-center gap-2 px-4 py-2.5 bg-slate-100 dark:bg-slate-800 rounded-full border border-slate-200 dark:border-slate-700">
           <Clock className="w-4 h-4 text-blue-600" />
-          <span className="text-sm font-medium text-slate-700 dark:text-slate-300">24/7 Available</span>
+          <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">Instant Responses</span>
+        </div>
+        <div className="flex items-center gap-2 px-4 py-2.5 bg-slate-100 dark:bg-slate-800 rounded-full border border-slate-200 dark:border-slate-700">
+          <MessageSquare className="w-4 h-4 text-purple-600" />
+          <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">Expert Knowledge</span>
         </div>
       </div>
 
-      {/* CTA */}
-      <p className="text-sm text-slate-500 dark:text-slate-400">
-        Type your legal question below to begin
-      </p>
+      {/* Professional CTA */}
+      <div className="space-y-2">
+        <p className="text-lg font-semibold text-slate-800 dark:text-slate-200">
+          Ready to start your consultation?
+        </p>
+        <p className="text-sm text-slate-500 dark:text-slate-400">
+          Type your legal question below to begin professional assistance
+        </p>
+      </div>
     </div>
   </div>
 ));
@@ -336,30 +345,35 @@ EmptyState.displayName = 'EmptyState';
 
 const TypingIndicator = memo(() => (
   <div className="flex justify-start mb-6">
-    <div className="flex items-center gap-4 bg-gradient-to-r from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-700 rounded-2xl px-6 py-4 shadow-sm border border-slate-200 dark:border-slate-600">
-      {/* AI Avatar */}
-      <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center">
-        <MessageSquare className="w-4 h-4 text-white" />
+    <div className="flex items-center gap-4 bg-gradient-to-r from-white to-slate-50 dark:from-slate-800 dark:to-slate-700 rounded-2xl px-6 py-4 shadow-md border border-slate-200 dark:border-slate-600">
+      {/* Professional AI Avatar */}
+      <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-full flex items-center justify-center shadow-lg">
+        <Shield className="w-5 h-5 text-white" />
       </div>
-      
-      {/* Typing Animation */}
-      <div className="flex items-center gap-2">
-        <div className="flex gap-1">
+
+      {/* Enhanced Typing Animation */}
+      <div className="flex items-center gap-3">
+        <div className="flex gap-1.5">
           {[0, 1, 2].map((index) => (
-            <div 
+            <div
               key={index}
-              className="w-2.5 h-2.5 bg-gradient-to-r from-blue-400 to-blue-500 rounded-full animate-bounce" 
-              style={{ 
-                animationDelay: `${index * 0.2}s`, 
-                animationDuration: '1.2s',
+              className="w-3 h-3 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full animate-bounce shadow-sm"
+              style={{
+                animationDelay: `${index * 0.2}s`,
+                animationDuration: '1.4s',
                 animationIterationCount: 'infinite'
               }}
             />
           ))}
         </div>
-        <span className="text-sm font-medium text-slate-600 dark:text-slate-300 ml-2">
-          AI is analyzing your query...
-        </span>
+        <div className="flex flex-col">
+          <span className="text-sm font-semibold text-slate-700 dark:text-slate-200">
+            Legal AI Assistant
+          </span>
+          <span className="text-xs text-slate-500 dark:text-slate-400">
+            Analyzing your legal query...
+          </span>
+        </div>
       </div>
     </div>
   </div>
@@ -367,8 +381,8 @@ const TypingIndicator = memo(() => (
 
 TypingIndicator.displayName = 'TypingIndicator';
 
-const ChatInterface = memo(({ 
-  sessionId, 
+const ChatInterface = memo(({
+  sessionId,
   initialMessages,
   onNewMessage
 }: ChatInterfaceProps) => {
@@ -379,6 +393,26 @@ const ChatInterface = memo(({
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const { user } = useAuth();
+  const [attachedFiles, setAttachedFiles] = useState<File[]>([]);
+  const [isVoiceRecording, setIsVoiceRecording] = useState(false);
+
+  const handleFileSelect = (files: FileList) => {
+    setAttachedFiles(prev => [...prev, ...Array.from(files)]);
+  };
+
+  const handleRemoveFile = (index: number) => {
+    setAttachedFiles(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const handleVoiceToggle = () => {
+    setIsVoiceRecording(prev => !prev);
+    // TODO: Implement actual voice recording functionality
+    if (!isVoiceRecording) {
+      toast.info('Voice recording started');
+    } else {
+      toast.info('Voice recording stopped');
+    }
+  };
 
   const {
     register,
@@ -390,8 +424,6 @@ const ChatInterface = memo(({
     resolver: zodResolver(FormMessageSchema),
     defaultValues: { content: '' }
   });
-
-  const messageContent = watch('content');
 
   // Memoized message processing
   const { visibleMessages, hasMessages, messageCount } = useMemo(() => {
@@ -405,7 +437,7 @@ const ChatInterface = memo(({
 
   // Sync with initial messages
   useEffect(() => {
-    const hasChanged = 
+    const hasChanged =
       initialMessages.length !== messages.filter(m => !m.isTemporary).length ||
       initialMessages.some((msg, index) => {
         const nonTempMessages = messages.filter(m => !m.isTemporary);
@@ -424,11 +456,11 @@ const ChatInterface = memo(({
   useEffect(() => {
     const container = messagesContainerRef.current;
     const endElement = messagesEndRef.current;
-    
+
     if (!container || !endElement) return;
 
     const isNearBottom = container.scrollHeight - container.scrollTop - container.clientHeight < 100;
-    
+
     if (shouldMaintainScroll || isNearBottom) {
       endElement.scrollIntoView({ behavior: 'smooth', block: 'end' });
     }
@@ -440,7 +472,7 @@ const ChatInterface = memo(({
         withCredentials: true
       });
       const latestMessages = response.data;
-      
+
       setMessages(prev => {
         const realMessages = prev.filter(m => !m.isTemporary);
         if (latestMessages.length > realMessages.length) {
@@ -448,7 +480,7 @@ const ChatInterface = memo(({
         }
         return prev;
       });
-      
+
       setIsTyping(false);
       onNewMessage();
     } catch (error) {
@@ -482,51 +514,45 @@ const ChatInterface = memo(({
     try {
       setIsSending(true);
       setShouldMaintainScroll(true);
-      
+
       // Add temporary message immediately for better UX
       setMessages(prev => [...prev, tempUserMessage]);
       reset();
-      
+
       // Start typing indicator after a short delay
       setTimeout(() => setIsTyping(true), 800);
-      
+
       // Send message to API
       await createMessage({
         session_id: sessionId,
         sender: 'user',
         content: data.content.trim(),
       });
-      
+
       // Fetch response after processing time
       setTimeout(fetchLatestMessages, 2000);
-      
+
     } catch (error) {
       console.error('Message sending failed:', error);
       toast.error('Failed to send message. Please try again.');
-      
+
       // Remove temporary message on error
       setMessages(prev => prev.filter(msg => msg.id !== tempId));
       setIsTyping(false);
     } finally {
       setIsSending(false);
     }
-  }, [user, sessionId, reset, fetchLatestMessages, onNewMessage]);
+  }, [user, sessionId, reset, fetchLatestMessages]);
 
-  const handleScroll = useCallback(() => {
-    const container = messagesContainerRef.current;
-    if (!container) return;
-    
-    const isAtBottom = container.scrollHeight - container.scrollTop - container.clientHeight < 50;
-    setShouldMaintainScroll(isAtBottom);
-  }, []);
+
 
   return (
-    <div className="flex flex-col h-full bg-gradient-to-br from-slate-50 via-white to-slate-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+    <div className="flex flex-col h-full bg-gradient-to-br from-slate-50 via-white to-blue-50/30 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
       {/* Messages Area */}
-      <div 
+      <div
         ref={messagesContainerRef}
         className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-300 dark:scrollbar-thumb-slate-600 scrollbar-track-transparent"
-        onScroll={handleScroll}
+        style={{ scrollbarWidth: 'thin', scrollbarColor: '#cbd5e1 #f8fafc' }}
       >
         {!hasMessages ? (
           <EmptyState />
@@ -546,23 +572,21 @@ const ChatInterface = memo(({
 
             {/* Messages */}
             {visibleMessages.map((message, index) => (
-              <div 
-                key={message.id} 
-                className={`transition-all duration-500 ${
-                  message.isTemporary ? 'opacity-70 scale-[0.98]' : 'opacity-100 scale-100'
-                } ${
-                  index === visibleMessages.length - 1 && !message.isTemporary
-                    ? 'animate-in slide-in-from-bottom-4 duration-500' 
+              <div
+                key={message.id}
+                className={`transition-all duration-500 ${message.isTemporary ? 'opacity-70 scale-[0.98]' : 'opacity-100 scale-100'
+                  } ${index === visibleMessages.length - 1 && !message.isTemporary
+                    ? 'animate-in slide-in-from-bottom-4 duration-500'
                     : ''
-                }`}
+                  }`}
               >
-                <MessageBubble 
+                <MessageBubble
                   message={{
                     id: message.id,
                     content: message.content,
                     role: message.sender === 'bot' ? 'assistant' : 'user',
                     created_at: message.timestamp
-                  }} 
+                  }}
                 />
               </div>
             ))}
@@ -579,10 +603,10 @@ const ChatInterface = memo(({
         )}
       </div>
 
-      {/* Input Area */}
-      <div className="border-t border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl">
-        <div className="p-6 max-w-4xl mx-auto">
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      {/* Professional Input Area */}
+      <div className="flex-shrink-0  backdrop-blur-sm shadow-lg">
+        <div className="p-4 max-w-4xl mx-auto">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
             <ChatInput<FormData>
               name="content"
               register={register}
@@ -591,17 +615,26 @@ const ChatInterface = memo(({
               isSending={isSending}
               disabled={isSending || isTyping}
               maxLength={4000}
-              showAttachments={false}
-              showVoiceInput={false}
+              showAttachments={true}
+              showVoiceInput={true}
+              attachedFiles={attachedFiles}
+              onFileSelect={handleFileSelect}
+              onRemoveFile={handleRemoveFile}
+              onVoiceToggle={handleVoiceToggle}
+              isVoiceRecording={isVoiceRecording}
+              value={watch('content')}
             />
-            
-            {/* Input Status */}
+
+            {/* Professional Input Status */}
             {(isSending || isTyping) && (
-              <div className="flex items-center justify-center">
-                <div className="flex items-center gap-2 px-3 py-1.5 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-full">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
-                  <span className="text-xs font-medium text-blue-700 dark:text-blue-300">
-                    {isSending ? 'Sending...' : 'AI is processing...'}
+              <div className="flex items-center justify-center py-2">
+                <div className="flex items-center gap-3 px-4 py-2.5 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30 border border-blue-200 dark:border-blue-700 rounded-xl shadow-sm">
+                  <div className="relative">
+                    <div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse" />
+                    <div className="absolute top-0 left-0 w-3 h-3 bg-blue-400 rounded-full animate-ping opacity-75" />
+                  </div>
+                  <span className="text-sm font-semibold text-blue-800 dark:text-blue-200">
+                    {isSending ? 'Transmitting your message...' : 'AI Legal Assistant is analyzing...'}
                   </span>
                 </div>
               </div>
