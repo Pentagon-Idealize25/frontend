@@ -115,9 +115,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const checkAuth = async () => {
       try {
+        console.log('Checking authentication...');
         const response = await axios.get(`${BASE_URL}/auth/me`, {
           withCredentials: true,
         });
+        
+        console.log('Auth check successful:', response.data);
         
         // Ensure response matches User interface
         setUser({
@@ -134,8 +137,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           setTheme(response.data.preferences.theme);
         }
       } catch (error) {
+        console.log('Auth check failed:', error);
         setUser(null);
-        console.debug('Auth check failed - user not authenticated');
       } finally {
         setLoading(false);
       }
@@ -148,10 +151,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = useCallback(async (email: string, password: string) => {
     try {
       setLoading(true);
-      await axios.post(`${BASE_URL}/auth/login`, { email, password }, { withCredentials: true });
+      console.log('Attempting login for:', email);
+      
+      const loginResponse = await axios.post(`${BASE_URL}/auth/login`, { email, password }, { withCredentials: true });
+      console.log('Login response:', loginResponse);
       
       // Verify login was successful and get user data
       const meResponse = await axios.get(`${BASE_URL}/auth/me`, { withCredentials: true });
+      console.log('User data response:', meResponse);
       
       const userData: User = {
         id: meResponse.data.id,
@@ -163,6 +170,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       };
       
       setUser(userData);
+      console.log('User set in context:', userData);
       
       // Apply user's theme preference
       if (userData.preferences?.theme) {

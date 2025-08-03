@@ -81,15 +81,19 @@ const createSession = async (
 const DashboardPage = memo(() => {
   const { setActiveSession } = useSessionContext();
   const router = useRouter();
-  const { user } = useAuth();
+  const { user, isAuthenticated } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   
-  // Use actual user ID when available, fallback to placeholder
-  const userId = user?.id || '68393605181b9fb5e3e48e01';
-  
   const handleCreateSession = useCallback(() => {
-    createSession(userId, setActiveSession, router, setIsLoading);
-  }, [userId, setActiveSession, router]);
+    if (user?.id) {
+      createSession(user.id, setActiveSession, router, setIsLoading);
+    }
+  }, [user?.id, setActiveSession, router]);
+
+  // Don't render anything if not authenticated
+  if (!isAuthenticated || !user) {
+    return null;
+  }
 
   return (
     <div className="h-full flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 p-6">

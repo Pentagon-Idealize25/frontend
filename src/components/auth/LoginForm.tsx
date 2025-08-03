@@ -17,7 +17,9 @@ export default function LoginForm() {
 
 
   useEffect(() => {
+    console.log('Login form - isAuthenticated:', isAuthenticated);
     if (isAuthenticated) {
+      console.log('Redirecting to dashboard...');
       router.push('/dashboard');
     }
   }, [isAuthenticated, router]);
@@ -27,23 +29,24 @@ export default function LoginForm() {
     setLoading(true);
     
     try {
+      console.log('Submitting login form...');
       await login(email, password);
-      toast.success('Logged in successfully');
-      router.push('/dashboard');
+      console.log('Login completed successfully');
+      // Don't manually redirect here, let the useEffect handle it
     } catch (error) {
+      console.error('Login form error:', error);
       toast.error('Login failed');
-      console.log("Login failed",error)
     } finally {
       setLoading(false);
     }
   };
 
-  const handleGoogleSuccess = async (token: string) => {
+  const handleGoogleSuccess = async () => {
     try {
-      await googleLogin(token);
-      toast.success('Logged in with Google');
-      router.push('/dashboard');
-    } catch (error) {
+      // TODO: Implement Google login
+      console.log('Google login not implemented yet');
+      toast.error('Google login not implemented yet');
+    } catch {
       toast.error('Google login failed');
     }
   };

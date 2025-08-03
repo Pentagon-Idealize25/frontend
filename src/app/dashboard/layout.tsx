@@ -1,14 +1,14 @@
 'use client'
 
-import { ReactNode, useState, createContext, useContext, memo, useCallback, useMemo } from 'react';
-import { AuthProvider } from '@/lib/context/AuthContext';
+import { ReactNode, useState, createContext, useContext, memo, useCallback, useMemo, useEffect } from 'react';
 import Header from '@/components/layout/Header';
 import SessionsSidebar from '@/components/layout/SessionSidebar';
 import { Toaster } from 'sonner';
 import { Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
-import { useAuth } from '@/lib/context/AuthContext'
+import { useAuth } from '@/lib/context/AuthContext';
+import { useRouter } from 'next/navigation';
 
 // Enhanced TypeScript interfaces
 interface SessionData {
@@ -80,7 +80,15 @@ SidebarOverlay.displayName = 'SidebarOverlay';
 const DashboardLayout = memo(function DashboardLayout({ children }: DashboardLayoutProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [activeSession, setActiveSession] = useState<SessionData | null>(null);
-  const { loading } = useAuth();
+  const { loading, isAuthenticated } = useAuth();
+  const router = useRouter();
+
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (!loading && !isAuthenticated) {
+      router.push('/login');
+    }
+  }, [loading, isAuthenticated, router]);
 
   // Memoized handlers for better performance
   const handleSidebarOpen = useCallback(() => setIsSidebarOpen(true), []);
@@ -96,44 +104,47 @@ const DashboardLayout = memo(function DashboardLayout({ children }: DashboardLay
     return <LoadingScreen />;
   }
 
+  // Don't render dashboard if not authenticated
+  if (!isAuthenticated) {
+    return <LoadingScreen />;
+  }
+
   return (
-    <AuthProvider>
-      <SessionContext.Provider value={sessionContextValue}>
-        <div className="flex h-screen bg-gray-50 dark:bg-gray-900">
-          <MobileSidebarToggle onClick={handleSidebarOpen} />
+    <SessionContext.Provider value={sessionContextValue}>
+      <div className="flex h-screen bg-gray-50 dark:bg-gray-900">
+        <MobileSidebarToggle onClick={handleSidebarOpen} />
 
-          {/* Sessions Sidebar */}
-          <div 
-            className={`fixed inset-y-0 left-0 z-40 w-64 transform transition-transform duration-300 ease-in-out bg-white dark:bg-gray-800 shadow-xl ${
-              isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
-            } md:translate-x-0 md:static md:flex`}
-          >
-            <SessionsSidebar 
-              onClose={handleSidebarClose} 
-              setActiveSession={setActiveSession}
-            />
-          </div>
-          
-          <SidebarOverlay isOpen={isSidebarOpen} onClose={handleSidebarClose} />
-
-          {/* Main content area */}
-          <div className="flex flex-col flex-1 overflow-hidden">
-            <Header />
-            
-            <main className="flex-1 min-h-0 bg-white dark:bg-gray-900">
-              {children}
-            </main>
-          </div>
-          
-          <Toaster 
-            position="top-right" 
-            toastOptions={{
-              className: 'bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700',
-            }}
+        {/* Sessions Sidebar */}
+        <div 
+          className={`fixed inset-y-0 left-0 z-40 w-64 transform transition-transform duration-300 ease-in-out bg-white dark:bg-gray-800 shadow-xl ${
+            isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+          } md:translate-x-0 md:static md:flex`}
+        >
+          <SessionsSidebar 
+            onClose={handleSidebarClose} 
+            setActiveSession={setActiveSession}
           />
         </div>
-      </SessionContext.Provider>
-    </AuthProvider>
+        
+        <SidebarOverlay isOpen={isSidebarOpen} onClose={handleSidebarClose} />
+
+        {/* Main content area */}
+        <div className="flex flex-col flex-1 overflow-hidden">
+          <Header />
+          
+          <main className="flex-1 min-h-0 bg-white dark:bg-gray-900">
+            {children}
+          </main>
+        </div>
+        
+        <Toaster 
+          position="top-right" 
+          toastOptions={{
+            className: 'bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700',
+          }}
+        />
+      </div>
+    </SessionContext.Provider>
   );
 });
 
