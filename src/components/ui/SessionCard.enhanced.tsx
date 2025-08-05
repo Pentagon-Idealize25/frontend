@@ -126,7 +126,7 @@ const SessionCard = memo(({ session, isActive, onClick, onSessionUpdated, onSess
       className={cn(
         'group relative p-4 rounded-lg cursor-pointer transition-all duration-200 border',
         isActive 
-          ? 'bg-gray-900  text-white border-gray-600 shadow-md' 
+          ? 'bg-gray-800  text-white border-gray-600 shadow-md' 
           : 'bg-white  hover:bg-slate-50  border-slate-200  hover:shadow-sm hover:border-slate-300 ',
         isEditing && 'cursor-default',
         isLoading && 'opacity-50 pointer-events-none'
@@ -145,7 +145,7 @@ const SessionCard = memo(({ session, isActive, onClick, onSessionUpdated, onSess
       <div className="flex items-start justify-between">
         <div className="flex items-start space-x-3 min-w-0 flex-1">
           {/* Session Icon */}
-          <div className={cn(
+          {/* <div className={cn(
             'flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center mt-0.5',
             isActive 
               ? 'bg-white/20' 
@@ -157,10 +157,10 @@ const SessionCard = memo(({ session, isActive, onClick, onSessionUpdated, onSess
                 ? 'text-white' 
                 : 'text-gray-600'
             )} />
-          </div>
+          </div> */}
 
           {/* Session Info */}
-          <div className="min-w-0 flex-1">
+          <div className="min-w-0 flex">
             {isEditing ? (
               <Input
                 type="text"
@@ -187,14 +187,14 @@ const SessionCard = memo(({ session, isActive, onClick, onSessionUpdated, onSess
                 {session.title}
               </h3>
             )}
-            <p className={cn(
+            {/* <p className={cn(
               'text-xs mt-1.5',
               isActive 
                 ? 'text-white/70' 
                 : 'text-slate-500 dark:text-slate-400'
             )}>
               {formatDate(session.created_at)}
-            </p>
+            </p> */}
           </div>
         </div>
         
