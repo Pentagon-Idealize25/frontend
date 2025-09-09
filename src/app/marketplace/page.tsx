@@ -8,6 +8,7 @@ import { type Lawyer } from '../../components/Marketplace/LawyerCard';
 import CustomerNavbar from '../../components/CustomerHeader/customersidebar';
 
 // Sample data
+
 const sampleLawyers: Lawyer[] = [
   {
     _id: "687be98d4e710b8309221056",
