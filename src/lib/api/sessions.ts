@@ -1,5 +1,5 @@
 import axios, { AxiosError } from 'axios';
-import { log } from 'console';
+// import { log } from 'console';
 
 const API_BASE_URL = 'http://localhost:8000';
 

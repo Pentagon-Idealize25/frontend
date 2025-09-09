@@ -9,10 +9,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Trash2, Edit, MessageCircle, Check, X, AlertTriangle } from 'lucide-react';
+import { Trash2, Edit, Check, X, AlertTriangle } from 'lucide-react';
 import { cn } from '@/lib/utils/utils';
 import { memo, useCallback, useState } from 'react';
-import { format } from 'date-fns';
 import { updateSessionTitle, deleteSession } from '@/lib/api/sessions';
 import { toast } from 'sonner';
 
@@ -113,13 +112,13 @@ const SessionCard = memo(({ session, isActive, onClick, onSessionUpdated, onSess
     }
   }, [isEditing, handleSaveEdit, handleCancelEdit]);
 
-  const formatDate = useCallback((dateString: string) => {
-    try {
-      return format(new Date(dateString), 'MMM d, yyyy');
-    } catch {
-      return 'Invalid date';
-    }
-  }, []);
+  // const formatDate = useCallback((dateString: string) => {
+  //   try {
+  //     return format(new Date(dateString), 'MMM d, yyyy');
+  //   } catch {
+  //     return 'Invalid date';
+  //   }
+  // }, []);
 
   return (
     <div 
