@@ -100,7 +100,7 @@ function parseRichText(text: string, options: FormattingOptions): React.ReactNod
   const matches = Array.from(text.matchAll(combinedPattern));
   let lastIndex = 0;
 
-  matches.forEach((match, index) => {
+  matches.forEach((match) => {
     const matchIndex = match.index!;
     
     // Add text before this match

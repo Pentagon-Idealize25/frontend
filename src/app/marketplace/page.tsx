@@ -60,7 +60,8 @@ const sampleLawyers: Lawyer[] = [
 ];
 
 const MarketplacePage: React.FC = () => {
-  const [lawyers, setLawyers] = useState<Lawyer[]>(sampleLawyers);
+  // const [lawyers, setLawyers] = useState<Lawyer[]>(sampleLawyers);
+  const lawyers = sampleLawyers
   const [filteredLawyers, setFilteredLawyers] = useState<Lawyer[]>(sampleLawyers);
   const [filters, setFilters] = useState<Filters>({
     expertise: [],

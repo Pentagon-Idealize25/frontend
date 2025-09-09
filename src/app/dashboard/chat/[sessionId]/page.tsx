@@ -8,7 +8,6 @@ import { toast } from 'sonner';
 import { 
   Loader2, 
   MessageCircle, 
-  Hash, 
   AlertCircle, 
   RefreshCw,
   ArrowLeft 
@@ -232,77 +231,77 @@ const ChatPage: React.FC = () => {
 };
 
 // Header Component
-interface ChatHeaderProps {
-  messageCount: number;
-  sessionId: string;
-  onBack: () => void;
-  hasError: boolean;
-}
+// interface ChatHeaderProps {
+//   messageCount: number;
+//   sessionId: string;
+//   onBack: () => void;
+//   hasError: boolean;
+// }
 
-const ChatHeader: React.FC<ChatHeaderProps> = ({ 
-  messageCount, 
-  sessionId, 
-  onBack, 
-  hasError 
-}) => (
-  <header className={cn(
-    "px-6 py-4 border-b",
-    "bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm",
-    hasError ? "border-red-200 dark:border-red-800" : "border-gray-200 dark:border-gray-700",
-    "transition-all duration-200"
-  )}>
-    <div className="flex items-center justify-between">
-      <div className="flex items-center space-x-4">
-        <button
-          onClick={onBack}
-          className={cn(
-            "p-2 rounded-lg transition-colors",
-            "hover:bg-gray-100 dark:hover:bg-gray-800",
-            "focus:outline-none focus:ring-2 focus:ring-gray-500",
-            "text-gray-600 dark:text-gray-400"
-          )}
-          aria-label="Go back to dashboard"
-        >
-          <ArrowLeft className="w-4 h-4" />
-        </button>
+// const ChatHeader: React.FC<ChatHeaderProps> = ({ 
+//   messageCount, 
+//   sessionId, 
+//   onBack, 
+//   hasError 
+// }) => (
+//   <header className={cn(
+//     "px-6 py-4 border-b",
+//     "bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm",
+//     hasError ? "border-red-200 dark:border-red-800" : "border-gray-200 dark:border-gray-700",
+//     "transition-all duration-200"
+//   )}>
+//     <div className="flex items-center justify-between">
+//       <div className="flex items-center space-x-4">
+//         <button
+//           onClick={onBack}
+//           className={cn(
+//             "p-2 rounded-lg transition-colors",
+//             "hover:bg-gray-100 dark:hover:bg-gray-800",
+//             "focus:outline-none focus:ring-2 focus:ring-gray-500",
+//             "text-gray-600 dark:text-gray-400"
+//           )}
+//           aria-label="Go back to dashboard"
+//         >
+//           <ArrowLeft className="w-4 h-4" />
+//         </button>
         
-        <div className="flex items-center space-x-3">
-          <div className={cn(
-            "w-10 h-10 rounded-full flex items-center justify-center",
-            "bg-gradient-to-br from-gray-900 to-gray-700",
-            "dark:from-gray-100 dark:to-gray-300",
-            "shadow-sm"
-          )}>
-            <MessageCircle className="w-5 h-5 text-white dark:text-gray-900" />
-          </div>
+//         <div className="flex items-center space-x-3">
+//           <div className={cn(
+//             "w-10 h-10 rounded-full flex items-center justify-center",
+//             "bg-gradient-to-br from-gray-900 to-gray-700",
+//             "dark:from-gray-100 dark:to-gray-300",
+//             "shadow-sm"
+//           )}>
+//             <MessageCircle className="w-5 h-5 text-white dark:text-gray-900" />
+//           </div>
           
-          <div>
-            <h1 className="font-semibold text-gray-900 dark:text-white">
-              Chat Session
-            </h1>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
-              {messageCount} {messageCount === 1 ? 'message' : 'messages'}
-            </p>
-          </div>
-        </div>
-      </div>
+//           <div>
+//             <h1 className="font-semibold text-gray-900 dark:text-white">
+//               Chat Session
+//             </h1>
+//             <p className="text-sm text-gray-500 dark:text-gray-400">
+//               {messageCount} {messageCount === 1 ? 'message' : 'messages'}
+//             </p>
+//           </div>
+//         </div>
+//       </div>
       
-      <div className="flex items-center space-x-2">
-        {hasError && (
-          <div className="flex items-center space-x-1 text-amber-600 dark:text-amber-400">
-            <AlertCircle className="w-4 h-4" />
-            <span className="text-xs font-medium">Connection issues</span>
-          </div>
-        )}
+//       <div className="flex items-center space-x-2">
+//         {hasError && (
+//           <div className="flex items-center space-x-1 text-amber-600 dark:text-amber-400">
+//             <AlertCircle className="w-4 h-4" />
+//             <span className="text-xs font-medium">Connection issues</span>
+//           </div>
+//         )}
         
-        <div className="flex items-center space-x-1 text-xs text-gray-400 dark:text-gray-500">
-          <Hash className="w-3 h-3" />
-          <span className="font-mono">{sessionId}</span>
-        </div>
-      </div>
-    </div>
-  </header>
-);
+//         <div className="flex items-center space-x-1 text-xs text-gray-400 dark:text-gray-500">
+//           <Hash className="w-3 h-3" />
+//           <span className="font-mono">{sessionId}</span>
+//         </div>
+//       </div>
+//     </div>
+//   </header>
+// );
 
 // Loading State Component
 interface LoadingStateProps {

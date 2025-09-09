@@ -1,7 +1,6 @@
 'use client'
 
 import { ReactNode, useState, createContext, useContext, memo, useCallback, useMemo, useEffect } from 'react';
-
 import SessionsSidebar from '@/components/layout/SessionSidebar';
 import { Toaster } from 'sonner';
 import { Menu } from 'lucide-react';
