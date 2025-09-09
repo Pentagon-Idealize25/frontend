@@ -74,7 +74,7 @@ const MarketplacePage: React.FC = () => {
 
 
   const filterLawyers = useCallback(() => {
-    const filtered = lawyers.filter(lawyer => {
+    let filtered = lawyers.filter(lawyer => {
       if (searchTerm && !lawyer.lawyerName.toLowerCase().includes(searchTerm.toLowerCase()) &&
           !lawyer.areaOfExpertise.some(area => area.toLowerCase().includes(searchTerm.toLowerCase()))) {
         return false;
