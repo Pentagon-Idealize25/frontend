@@ -138,12 +138,12 @@ function parseRichText(text: string, options: FormattingOptions): React.ReactNod
   return parts;
 }
 
-export function formatText(text: string, userOptions: Partial<FormattingOptions> = {}): JSX.Element[] {
+export function formatText(text: string, userOptions: Partial<FormattingOptions> = {}): React.ReactElement[] {
   // Merge user options with defaults
   const options: FormattingOptions = { ...DEFAULT_OPTIONS, ...userOptions };
   
   const lines = text.split('\n');
-  const elements: JSX.Element[] = [];
+  const elements: React.ReactElement[] = [];
   let elementIndex = 0;
 
   for (let line of lines) {
@@ -178,7 +178,7 @@ export function formatText(text: string, userOptions: Partial<FormattingOptions>
       if (headingMatch) {
         const level = headingMatch[1].length;
         const content = headingMatch[2];
-        const HeadingTag = `h${Math.min(level, 6)}` as keyof JSX.IntrinsicElements;
+        const HeadingTag = `h${Math.min(level, 6)}` as React.ElementType;
         
         elements.push(
           <HeadingTag key={`heading-${elementIndex++}`} className={options.headingClassName}>
@@ -249,15 +249,15 @@ export const presets = {
 };
 
 // Example usage functions
-export function formatMarkdown(text: string): JSX.Element[] {
+export function formatMarkdown(text: string): React.ReactElement[] {
   return formatText(text, presets.markdown);
 }
 
-export function formatDocumentation(text: string): JSX.Element[] {
+export function formatDocumentation(text: string): React.ReactElement[] {
   return formatText(text, presets.documentation);
 }
 
-export function formatWithCustomPatterns(text: string): JSX.Element[] {
+export function formatWithCustomPatterns(text: string): React.ReactElement[] {
   return formatText(text, {
     customPatterns: [
       {
