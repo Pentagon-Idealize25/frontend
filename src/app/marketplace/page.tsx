@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import MarketplaceHeader from '../../components/Marketplace/MarketplaceHeader';
 import FilterSidebar, { type Filters } from '../../components/Marketplace/FilterSidebar';
 import LawyerGrid from '../../components/Marketplace/LawyerGrid';
@@ -71,8 +71,9 @@ const MarketplacePage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [sortBy, setSortBy] = useState<string>(''); // NEW STATE for sorting
 
-  const filterLawyers = () => {
-    let filtered = lawyers.filter(lawyer => {
+
+  const filterLawyers = useCallback(() => {
+    const filtered = lawyers.filter(lawyer => {
       if (searchTerm && !lawyer.lawyerName.toLowerCase().includes(searchTerm.toLowerCase()) &&
           !lawyer.areaOfExpertise.some(area => area.toLowerCase().includes(searchTerm.toLowerCase()))) {
         return false;
@@ -104,11 +105,11 @@ const MarketplacePage: React.FC = () => {
     });
 
     setFilteredLawyers(filtered);
-  };
+  }, [filters, searchTerm, lawyers]);
 
   useEffect(() => {
     filterLawyers();
-  }, [filters, searchTerm, lawyers]);
+  }, [filters, searchTerm, lawyers,filterLawyers]);
 
   const handleFilterChange = (filterType: string, value?: string, checked?: boolean) => {
     if (filterType === 'reset') {

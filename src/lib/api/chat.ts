@@ -23,9 +23,19 @@ export async function createMessage(message: {
       content: message.content,
       reply_to_id: message.reply_to_id || null,
     });
-  } catch (error: any) {
-    console.error('API Error:', error.response?.data || error.message);
-    const detail = error.response?.data?.detail || 'Failed to create message';
-    throw new Error(detail);
+  } catch (error: unknown) {
+    let errorMessage = 'Failed to create message';
+
+    if (axios.isAxiosError(error)) {
+      errorMessage = error.response?.data?.detail || error.message;
+      console.error('API Error:', error.response?.data || error.message);
+    } else if (error instanceof Error) {
+      errorMessage = error.message;
+      console.error('Error:', error.message);
+    } else {
+      console.error('Unknown error:', error);
+    }
+
+    throw new Error(errorMessage);
   }
 }
