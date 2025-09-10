@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 
 interface Lawyer {
   _id: string;
@@ -25,13 +26,13 @@ const LawyerCard: React.FC<LawyerCardProps> = ({ lawyer }) => {
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 border border-gray-200">
       <div className="relative">
-        <img
+        <Image
           src={lawyer.imageUrl || "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face"}
           alt={lawyer.lawyerName}
-          className="w-full h-50  object-cover"
-          onError={(e) => {
-            e.currentTarget.src = "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face";
-          }}
+          width={400}
+          height={200}
+          className="w-full h-50 object-cover"
+          priority
         />
         <div className="absolute top-2 right-2 bg-gray-800 text-white px-2 py-1 rounded text-xs font-semibold">
           Bar: {lawyer.barRegistration}

@@ -11,7 +11,7 @@ import { useSessionContext } from '@/app/dashboard/layout';
 import axios from 'axios';
 import { toast } from 'sonner';
 import { Session } from '@/lib/api/sessions';
-import SessionCard from '@/components/ui/SessionCard.enhanced';
+import SessionCard from '@/components/ui/SessionCard';
 import { format, isToday, isYesterday, parseISO } from 'date-fns';
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:8000';
 

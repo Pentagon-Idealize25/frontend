@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Image from 'next/image';
 
 interface CustomerNavbarProps {
   userProfileImage?: string;
@@ -76,13 +77,13 @@ const CustomerNavbar: React.FC<CustomerNavbarProps> = ({
               className="flex items-center space-x-3 text-gray-100 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-75 rounded-md p-2 transition-colors duration-200"
             >
               <span className="hidden md:block text-sm font-medium">{userName}</span>
-              <img
+              <Image
                 className="h-10 w-10 rounded-full border-2 border-gray-300 hover:border-white transition-colors duration-200 object-cover"
-                src={userProfileImage}
+                src={userProfileImage || "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face"}
                 alt="Profile"
-                onError={(e) => {
-                  e.currentTarget.src = "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face";
-                }}
+                width={40}
+                height={40}
+                priority
               />
               <svg 
                 className={`w-4 h-4 transition-transform duration-200 ${isProfileDropdownOpen ? 'rotate-180' : ''}`} 

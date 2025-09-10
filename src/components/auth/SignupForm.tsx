@@ -99,9 +99,10 @@ export default function SignupForm() {
       setTimeout(() => {
         router.push('/dashboard');
       }, 1500);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Signup error:', error);
-      toast.error(error.message || 'An unexpected error occurred');
+      const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
