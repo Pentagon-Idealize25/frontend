@@ -110,7 +110,7 @@ const MarketplacePage: React.FC = () => {
 
   useEffect(() => {
     filterLawyers();
-  }, [filters, searchTerm, lawyers,filterLawyers]);
+  }, [filterLawyers]);
 
   const handleFilterChange = (filterType: string, value?: string, checked?: boolean) => {
     if (filterType === 'reset') {
