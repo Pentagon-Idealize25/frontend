@@ -178,7 +178,7 @@ export function formatText(text: string, userOptions: Partial<FormattingOptions>
       if (headingMatch) {
         const level = headingMatch[1].length;
         const content = headingMatch[2];
-        const HeadingTag = `h${Math.min(level, 6)}` as keyof React.JSX.IntrinsicElements;
+        const HeadingTag = `h${Math.min(level, 6)}` as React.ElementType;
         
         elements.push(
           React.createElement(HeadingTag, {

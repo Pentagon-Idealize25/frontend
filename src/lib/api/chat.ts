@@ -24,16 +24,18 @@ export async function createMessage(message: {
       reply_to_id: message.reply_to_id || null,
     });
   } catch (error: unknown) {
-    const errorMessage = error instanceof Error ? error.message : 'Failed to create message';
-    console.error('API Error:', errorMessage);
-    
-    // Handle axios errors specifically
-    if (typeof error === 'object' && error !== null && 'response' in error) {
-      const axiosError = error as { response?: { data?: { detail?: string } } };
-      const detail = axiosError.response?.data?.detail || 'Failed to create message';
-      throw new Error(detail);
+    let errorMessage = 'Failed to create message';
+
+    if (axios.isAxiosError(error)) {
+      errorMessage = error.response?.data?.detail || error.message;
+      console.error('API Error:', error.response?.data || error.message);
+    } else if (error instanceof Error) {
+      errorMessage = error.message;
+      console.error('Error:', error.message);
+    } else {
+      console.error('Unknown error:', error);
     }
-    
+
     throw new Error(errorMessage);
   }
 }
