@@ -2,7 +2,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { Plus, Search, X, MessageSquare, User, LogOut, Settings } from 'lucide-react';
+import { Plus, Search, X, MessageSquare, User, LogOut, Settings, Sun, Moon } from 'lucide-react';
 import { useAuth } from '@/lib/context/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -22,7 +22,7 @@ const SessionsSidebar = ({
   onClose?: () => void;
   setActiveSession: (session: { id: string; title: string } | null) => void;
 }) => {
-  const { user } = useAuth();
+  const { user, theme ,setTheme , isDarkMode } = useAuth();
   const router = useRouter();
   const [sessions, setSessions] = useState<Session[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -30,6 +30,14 @@ const SessionsSidebar = ({
   const { activeSession } = useSessionContext();
   const { logout } = useAuth();
   
+
+  const toggleTheme = () => {
+  if (isDarkMode) {
+    setTheme('light');
+  } else {
+    setTheme('dark');
+  }
+};
   const getSessions = useCallback(async () => {
     const res = await axios.get(`${BASE_URL}/sessions`, { withCredentials: true });
     return res.data.sessions;
@@ -206,6 +214,19 @@ const SessionsSidebar = ({
             </div>
           </div>
           <div className="flex gap-1">
+            <Button 
+              variant="ghost" 
+              size="icon"
+              onClick={toggleTheme}
+              className="h-8 w-8 text-slate-500 hover:text-slate-700 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:bg-slate-700 transition-colors duration-200"
+              title={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
+            >
+              {isDarkMode ? (
+                <Sun className="h-4 w-4" />
+              ) : (
+                <Moon className="h-4 w-4" />
+              )}
+            </Button>
             <Button 
               variant="ghost" 
               size="icon" 

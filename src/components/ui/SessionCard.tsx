@@ -125,8 +125,8 @@ const SessionCard = memo(({ session, isActive, onClick, onSessionUpdated, onSess
       className={cn(
         'group relative p-4 rounded-lg cursor-pointer transition-all duration-200 border',
         isActive 
-          ? 'bg-gray-800  text-white border-gray-600 shadow-md' 
-          : 'bg-white  hover:bg-slate-50  border-slate-200  hover:shadow-sm hover:border-slate-300 ',
+          ? 'bg-gray-800 text-white border-gray-600 shadow-md' 
+          : 'bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border-slate-200 dark:border-slate-600 hover:shadow-sm hover:border-slate-300 dark:hover:border-slate-500',
         isEditing && 'cursor-default',
         isLoading && 'opacity-50 pointer-events-none'
       )}

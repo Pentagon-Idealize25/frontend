@@ -195,10 +195,10 @@ const MessageBubble = memo(({ message, className }: MessageBubbleProps) => {
         {/* Enhanced Message Content */}
         <div className="flex flex-col space-y-1 min-w-0 h-fit">
           <div className={cn(
-            'relative px-5 py-2 rounded-2xl  transition-all duration-300 ',
+            'relative px-5 py-2 rounded-2xl transition-all duration-300',
             isOwnMessage 
-              ? 'bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-br-md ' 
-              : 'bg-gradient-to-br from-white to-slate-50 border  dark:border-slate-600 rounded-bl-md   '
+              ? 'bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-br-md' 
+              : 'bg-gradient-to-br from-white to-slate-50 dark:from-slate-800 dark:to-slate-700 border border-slate-200 dark:border-slate-600 rounded-bl-md text-slate-900 dark:text-white'
           )}>
             {/* Content */}
             <div className="whitespace-pre-wrap break-words text-sm leading-relaxed font-medium py-1">
