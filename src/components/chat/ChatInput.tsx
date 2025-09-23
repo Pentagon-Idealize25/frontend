@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useRef, useEffect, useCallback, memo, useState } from 'react';
@@ -271,7 +270,7 @@ function ChatInputComponent<T extends FieldValues = FieldValues>({
             "group",
             isEmpty || isOverLimit || disabled || isSending
               ? "bg-slate-200 dark:bg-slate-700 text-slate-400 dark:text-slate-500 cursor-not-allowed"
-              : "bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg hover:shadow-xl hover:scale-105"
+              : "bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 dark:from-gray-400 dark:to-gray-300 dark:hover:from-gray-300 dark:hover:to-gray-200 text-white shadow-lg hover:shadow-xl hover:scale-105"
           )}
           aria-label={isSending ? 'Sending message...' : 'Send message'}
         >

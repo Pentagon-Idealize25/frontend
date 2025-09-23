@@ -1,45 +1,56 @@
 // components/layout/SessionsSidebar.tsx
-'use client';
+"use client";
 
-import { useState, useEffect, useCallback } from 'react';
-import { Plus, Search, X, MessageSquare, User, LogOut, Settings, Sun, Moon } from 'lucide-react';
-import { useAuth } from '@/lib/context/AuthContext';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { useRouter } from 'next/navigation';
-import { useSessionContext } from '@/app/dashboard/layout';
-import axios from 'axios';
-import { toast } from 'sonner';
-import { Session } from '@/lib/api/sessions';
-import SessionCard from '@/components/ui/SessionCard';
-import { format, isToday, isYesterday, parseISO } from 'date-fns';
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:8000';
+import { useState, useEffect, useCallback } from "react";
+import {
+  Plus,
+  Search,
+  X,
+  MessageSquare,
+  User,
+  LogOut,
+  Settings,
+  Sun,
+  Moon,
+} from "lucide-react";
+import { useAuth } from "@/lib/context/AuthContext";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useRouter } from "next/navigation";
+import { useSessionContext } from "@/app/dashboard/layout";
+import axios from "axios";
+import { toast } from "sonner";
+import { Session } from "@/lib/api/sessions";
+import SessionCard from "@/components/ui/SessionCard";
+import { format, isToday, isYesterday, parseISO } from "date-fns";
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:8000";
 
-const SessionsSidebar = ({ 
+const SessionsSidebar = ({
   onClose,
-  setActiveSession
-}: { 
+  setActiveSession,
+}: {
   onClose?: () => void;
   setActiveSession: (session: { id: string; title: string } | null) => void;
 }) => {
-  const { user, theme ,setTheme , isDarkMode } = useAuth();
+  const { user, theme, setTheme, isDarkMode } = useAuth();
   const router = useRouter();
   const [sessions, setSessions] = useState<Session[]>([]);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const { activeSession } = useSessionContext();
   const { logout } = useAuth();
-  
 
   const toggleTheme = () => {
-  if (isDarkMode) {
-    setTheme('light');
-  } else {
-    setTheme('dark');
-  }
-};
+    if (isDarkMode) {
+      setTheme("light");
+    } else {
+      setTheme("dark");
+    }
+  };
   const getSessions = useCallback(async () => {
-    const res = await axios.get(`${BASE_URL}/sessions`, { withCredentials: true });
+    const res = await axios.get(`${BASE_URL}/sessions`, {
+      withCredentials: true,
+    });
     return res.data.sessions;
   }, []);
 
@@ -48,7 +59,7 @@ const SessionsSidebar = ({
       const data = await getSessions();
       setSessions(data);
     } catch (error) {
-      toast.error('Failed to load chat sessions');
+      toast.error("Failed to load chat sessions");
       console.error(error);
     } finally {
       setIsLoading(false);
@@ -59,7 +70,7 @@ const SessionsSidebar = ({
     fetchSessions();
   }, [fetchSessions]);
 
-  const filteredSessions = sessions.filter(session => 
+  const filteredSessions = sessions.filter((session) =>
     session.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -67,12 +78,12 @@ const SessionsSidebar = ({
   const getDateLabel = (dateString: string): string => {
     try {
       const date = parseISO(dateString);
-      if (isToday(date)) return 'Today';
-      if (isYesterday(date)) return 'Yesterday';
-      return format(date, 'MMMM d, yyyy');
+      if (isToday(date)) return "Today";
+      if (isYesterday(date)) return "Yesterday";
+      return format(date, "MMMM d, yyyy");
     } catch {
-      console.warn('Invalid date format:', dateString);
-      return 'Unknown Date';
+      console.warn("Invalid date format:", dateString);
+      return "Unknown Date";
     }
   };
 
@@ -105,28 +116,33 @@ const SessionsSidebar = ({
     const sessionB = groupedSessions[b][0];
     const sortValueA = getDateSortValue(sessionA.created_at);
     const sortValueB = getDateSortValue(sessionB.created_at);
-    
+
     if (sortValueA !== sortValueB) {
       return sortValueA - sortValueB;
     }
-    
+
     // If both are in the "other dates" category, sort by actual date (newest first)
     if (sortValueA === 2 && sortValueB === 2) {
       try {
-        return parseISO(sessionB.created_at).getTime() - parseISO(sessionA.created_at).getTime();
+        return (
+          parseISO(sessionB.created_at).getTime() -
+          parseISO(sessionA.created_at).getTime()
+        );
       } catch {
         return 0;
       }
     }
-    
+
     return 0;
   });
 
   // Sort sessions within each group by creation time (newest first)
-  Object.keys(groupedSessions).forEach(dateLabel => {
+  Object.keys(groupedSessions).forEach((dateLabel) => {
     groupedSessions[dateLabel].sort((a, b) => {
       try {
-        return parseISO(b.created_at).getTime() - parseISO(a.created_at).getTime();
+        return (
+          parseISO(b.created_at).getTime() - parseISO(a.created_at).getTime()
+        );
       } catch {
         return 0;
       }
@@ -135,11 +151,15 @@ const SessionsSidebar = ({
 
   const createNewSession = async () => {
     try {
-      await axios.post(`${BASE_URL}/sessions/create`, { title: "New legal consultation" }, { withCredentials: true });
+      await axios.post(
+        `${BASE_URL}/sessions/create`,
+        { title: "New legal consultation" },
+        { withCredentials: true }
+      );
       await fetchSessions();
       if (onClose) onClose();
     } catch (error) {
-      toast.error('Failed to create new session');
+      toast.error("Failed to create new session");
       console.error(error);
     }
   };
@@ -150,49 +170,53 @@ const SessionsSidebar = ({
     if (onClose) onClose();
   };
 
-  const handleSessionDeleted = useCallback(async (deletedSessionId: string) => {
-    // Remove from local state
-    setSessions(prevSessions => prevSessions.filter(session => session.id !== deletedSessionId));
-    
-    // Handle active session management
-    if (activeSession?.id === deletedSessionId) {
-      const remainingSessions = sessions.filter(session => session.id !== deletedSessionId);
-      
-      if (remainingSessions.length > 0) {
-        // Set the first remaining session as active
-        const nextSession = remainingSessions[0];
-        setActiveSession({ id: nextSession.id, title: nextSession.title });
-        router.push(`/dashboard/chat/${nextSession.id}`);
-      } else {
-        // No sessions left, clear active session
-        setActiveSession(null);
-        router.push('/dashboard');
+  const handleSessionDeleted = useCallback(
+    async (deletedSessionId: string) => {
+      // Remove from local state
+      setSessions((prevSessions) =>
+        prevSessions.filter((session) => session.id !== deletedSessionId)
+      );
+
+      // Handle active session management
+      if (activeSession?.id === deletedSessionId) {
+        const remainingSessions = sessions.filter(
+          (session) => session.id !== deletedSessionId
+        );
+
+        if (remainingSessions.length > 0) {
+          // Set the first remaining session as active
+          const nextSession = remainingSessions[0];
+          setActiveSession({ id: nextSession.id, title: nextSession.title });
+          router.push(`/dashboard/chat/${nextSession.id}`);
+        } else {
+          // No sessions left, clear active session
+          setActiveSession(null);
+          router.push("/dashboard");
+        }
       }
-    }
-    
-    // Refresh sessions list to ensure consistency
-    await fetchSessions();
-  }, [activeSession, sessions, setActiveSession, router, fetchSessions]);
+
+      // Refresh sessions list to ensure consistency
+      await fetchSessions();
+    },
+    [activeSession, sessions, setActiveSession, router, fetchSessions]
+  );
 
   const handleLogout = async () => {
     setActiveSession(null);
 
-    const logoutPromise = toast.promise(
-      logout(),
-      {
-        loading: 'Signing out...',
-        success: 'Signed out successfully',
-        error: 'Sign out failed. Please try again.',
-      }
-    );
+    const logoutPromise = toast.promise(logout(), {
+      loading: "Signing out...",
+      success: "Signed out successfully",
+      error: "Sign out failed. Please try again.",
+    });
 
     try {
       await logoutPromise;
       setTimeout(() => {
-        window.location.href = '/';
+        window.location.href = "/";
       }, 1000);
     } catch (error) {
-      console.error('Logout error:', error);
+      console.error("Logout error:", error);
     }
   };
   return (
@@ -205,21 +229,23 @@ const SessionsSidebar = ({
               <MessageSquare className="h-5 w-5 text-white" />
             </div>
             <div>
-              <h1 className="text-sm font-semibold text-slate-900 dark:text-slate-100">
-                Legal Assistant
+              <h1 className="text-xl font-semibold text-slate-900 dark:text-slate-100">
+                Lawgan
               </h1>
-              <p className="text-sm text-slate-500 dark:text-slate-400">
-                Chat Sessions
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                Your legal assistant
               </p>
             </div>
           </div>
           <div className="flex gap-1">
-            <Button 
-              variant="ghost" 
+            <Button
+              variant="ghost"
               size="icon"
               onClick={toggleTheme}
               className="h-8 w-8 text-slate-500 hover:text-slate-700 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:bg-slate-700 transition-colors duration-200"
-              title={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
+              title={
+                isDarkMode ? "Switch to light mode" : "Switch to dark mode"
+              }
             >
               {isDarkMode ? (
                 <Sun className="h-4 w-4" />
@@ -227,9 +253,9 @@ const SessionsSidebar = ({
                 <Moon className="h-4 w-4" />
               )}
             </Button>
-            <Button 
-              variant="ghost" 
-              size="icon" 
+            <Button
+              variant="ghost"
+              size="icon"
               className="md:hidden h-8 w-8 text-slate-500 hover:text-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700"
               onClick={onClose}
               title="Close sidebar"
@@ -238,41 +264,48 @@ const SessionsSidebar = ({
             </Button>
           </div>
         </div>
-        
-        {/* New Session Button */}
-        <Button 
-          onClick={createNewSession}
-          className="w-full bg-gray-600 hover:bg-gray-700 text-white font-medium py-2.5 mb-4 transition-colors duration-200"
-        >
-          <Plus className="h-4 w-4 mr-2" />
-          New Consultation
-        </Button>
 
-        {/* Search Input */}
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400" />
-          <Input
-            type="text"
-            placeholder="Search sessions..."
-            className="pl-10 pr-10 h-10 bg-slate-50 dark:bg-slate-700 border-slate-200 dark:border-slate-600 text-slate-900 dark:text-slate-100 placeholder:text-slate-500 focus:border-blue-500 focus:ring-blue-500"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          {searchTerm && (
-            <X 
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400 cursor-pointer hover:text-slate-600 transition-colors"
-              onClick={() => setSearchTerm('')}
+        <div className="flex items-center gap-3">
+          {/* New Session Button */}
+          <Button
+            onClick={createNewSession}
+            variant="outline"
+            className="flex items-center justify-center w-10 h-10 
+             bg-gray-950 hover:bg-gray-200 text-white hover:text-black hover:border-b-2 hover:border-gray-600 
+             shadow-md transition-colors rounded-xl"
+          >
+            <Plus className="h-5 w-5" />
+          </Button>
+
+          {/* Search Input */}
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+            <Input
+              type="text"
+              placeholder="Search sessions..."
+              className="w-full pl-10 pr-10 h-10 rounded-lg bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-900 dark:text-slate-100 placeholder:text-slate-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 transition"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
-          )}
+            {searchTerm && (
+              <X
+                className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 cursor-pointer hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
+                onClick={() => setSearchTerm("")}
+              />
+            )}
+          </div>
         </div>
       </div>
-      
+
       {/* Sessions List */}
       <div className="flex-1 overflow-y-auto">
         {isLoading ? (
           <div className="p-6 space-y-4">
             {[...Array(5)].map((_, i) => (
-              <div key={i} className="animate-pulse bg-white dark:bg-slate-800 rounded-lg p-4 border border-slate-200 dark:border-slate-700">
+              <div
+                key={i}
+                className="animate-pulse bg-white dark:bg-slate-800 rounded-lg p-4 border border-slate-200 dark:border-slate-700"
+              >
                 <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded w-3/4 mb-3"></div>
                 <div className="h-3 bg-slate-200 dark:bg-slate-700 rounded w-1/2 mb-2"></div>
                 <div className="h-3 bg-slate-200 dark:bg-slate-700 rounded w-1/3"></div>
@@ -309,14 +342,18 @@ const SessionsSidebar = ({
               <MessageSquare className="h-8 w-8 text-slate-400" />
             </div>
             <p className="text-slate-600 dark:text-slate-400 mb-4 font-medium">
-              {searchTerm ? 'No sessions match your search' : 'No sessions found'}
+              {searchTerm
+                ? "No sessions match your search"
+                : "No sessions found"}
             </p>
             <p className="text-sm text-slate-500 dark:text-slate-500 mb-6">
-              {searchTerm ? 'Try adjusting your search terms' : 'Start your first legal consultation'}
+              {searchTerm
+                ? "Try adjusting your search terms"
+                : "Start your first legal consultation"}
             </p>
             {!searchTerm && (
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 onClick={createNewSession}
                 className="border-blue-200 text-blue-600 hover:bg-blue-50 dark:border-blue-800 dark:text-blue-400 dark:hover:bg-blue-900/20"
               >
@@ -327,7 +364,7 @@ const SessionsSidebar = ({
           </div>
         )}
       </div>
-      
+
       {/* User Profile Section */}
       {user && (
         <div className="p-6 border-t border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
@@ -349,16 +386,16 @@ const SessionsSidebar = ({
               </div>
             </div>
             <div className="flex gap-1 ml-2">
-              <Button 
-                variant="ghost" 
+              <Button
+                variant="ghost"
                 size="icon"
                 className="h-8 w-8 text-slate-500 hover:text-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700"
                 title="Settings"
               >
                 <Settings className="h-4 w-4" />
               </Button>
-              <Button 
-                variant="ghost" 
+              <Button
+                variant="ghost"
                 size="icon"
                 onClick={handleLogout}
                 className="h-8 w-8 text-slate-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"

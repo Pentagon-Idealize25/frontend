@@ -39,6 +39,7 @@ interface AuthContextType {
   refreshTokens: () => Promise<boolean>;
   isAuthenticated: boolean;
   loading: boolean;
+  refreshing: boolean;
   
   // Theme management
   theme: Theme;
@@ -82,6 +83,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [theme, setThemeState] = useState<Theme>('system');
+  const [refreshing, setRefreshing] = useState(false);
 
   // Theme management
   const setTheme = useCallback((newTheme: Theme) => {
@@ -259,12 +261,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     refreshTokens,
     isAuthenticated: !!user,
     loading,
+    refreshing,
     
     // Theme management
     theme,
     setTheme,
     isDarkMode
-  }), [user, login, logout, signup, refreshTokens, loading, theme, setTheme, isDarkMode]);
+  }), [user, login, logout, signup, refreshTokens, loading, refreshing, theme, setTheme, isDarkMode]);
 
   return (
     <AuthContext.Provider value={value}>
@@ -305,6 +308,7 @@ export function useUser() {
   return {
     user: context.user,
     isAuthenticated: context.isAuthenticated,
-    loading: context.loading
+    loading: context.loading,
+    refreshing: context.refreshing
   };
 }

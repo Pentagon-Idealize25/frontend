@@ -15,6 +15,9 @@ import { memo, useCallback, useState } from 'react';
 import { updateSessionTitle, deleteSession } from '@/lib/api/sessions';
 import { toast } from 'sonner';
 
+
+
+
 interface SessionCardProps {
   session: {
     id: string;
@@ -32,6 +35,7 @@ const SessionCard = memo(({ session, isActive, onClick, onSessionUpdated, onSess
   const [editTitle, setEditTitle] = useState(session.title);
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+
 
   const handleEdit = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();

@@ -25,6 +25,7 @@ const ChatLayout: React.FC<ChatLayoutProps> = ({ children }) => {
           "border border-gray-200/50 dark:border-gray-700/50",
           "rounded-lg shadow-sm",
           "mx-2 my-2",
+          "h-screen",
           "overflow-hidden"
         )}>
           {children}
